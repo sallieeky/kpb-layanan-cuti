@@ -156,6 +156,8 @@
 
 
 <!-- replace CDN url with local bpmn-js path -->
+@endsection
+@section('script')
 <script src="https://unpkg.com/bpmn-js/dist/bpmn-viewer.development.js"></script>
 <script>
   function fetchDiagram() {

@@ -10,6 +10,8 @@
     <meta name="author" content="">
 
     <title>ITK - Layanan Permohonan Cuti</title>
+    {{-- favicon --}}
+    <link rel="icon" href="{{ asset('template/img/itk.png') }}">
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset("template") }}/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -34,9 +36,11 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ asset("template") }}/index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+                {{-- <div class="sidebar-brand-icon rotate-n-15"> --}}
+                <div class="sidebar-brand-icon">
+                    {{-- <i class="fas fa-laugh-wink"></i> --}}
+                    <img src="{{ asset('template/img/itk.png') }}" alt="ITK Logo" width="50">
                 </div>
                 <div class="sidebar-brand-text mx-3">Layanan Cuti</div>
             </a>

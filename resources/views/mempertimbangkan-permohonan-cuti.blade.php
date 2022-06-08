@@ -44,7 +44,7 @@
                 <input type="hidden" name="id" value="{{ $data["task"][0]["id"] }}">
                 <div class="form-group">
                   <label for="disetujui">Disetujui</label>
-                  <select class="form-control" id="disetujui" name="disetujui">
+                  <select class="form-control" id="disetujui" name="disetujui" required>
                     <option value="iya">Ya</option>
                     <option value="tidak">Tidak</option>
                   </select>

@@ -33,7 +33,7 @@
                 <h5>Tanda Tangan Pengesahan {{ $data["task"][0]["assignee"] }}</h5>
                 <div class="form-group">
                   <label for="tanda_tangan_pengesahan">File Tanda Tangan Pengesahan {{ $data["task"][0]["assignee"] }}</label>
-                  <input type="file" id="tanda_tangan_pengesahan" class="form-control" name="tanda_tangan_pengesahan" accept=".pdf">
+                  <input type="file" id="tanda_tangan_pengesahan" required class="form-control" name="tanda_tangan_pengesahan" accept=".pdf">
                 </div>
                 <button type="submit" class="btn btn-primary">Kirim Pengesahan</button>
               </form>
