@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,7 +40,7 @@ use Illuminate\Support\Facades\Route;
 //         $call = $call->json();
 //         $data[] = $call;
 //     }
-    
+
 //     $data2 = [];
 //     foreach ($json as $js) {
 //         $call = Http::get("http://localhost:8080/engine-rest/task", [
@@ -47,7 +49,7 @@ use Illuminate\Support\Facades\Route;
 //         $call = $call->json();
 //         $data2[] = $call;
 //     }
-    
+
 //     $data3 = [];
 //     foreach ($json as $js) {
 //         $call = Http::get("http://localhost:8080/engine-rest/variable-instance", [
@@ -56,7 +58,7 @@ use Illuminate\Support\Facades\Route;
 //         $call = $call->json();
 //         $data3[] = $call;
 //     }
-    
+
 
 //     return $data3;
 //     // return view("welcome", compact("json"));
@@ -69,18 +71,53 @@ Route::get('/logout', [DashboardController::class, "logout"]);
 
 Route::middleware(['login'])->group(function () {
   Route::get('/', [DashboardController::class, "home"]);
-  
+
   Route::post('/start-instance', [DashboardController::class, "startInstance"]);
   Route::post('/delete-instance', [DashboardController::class, "deleteInstance"]);
   Route::get('/activity/{idInstance}', [DashboardController::class, "activity"]);
-  
+
   Route::get('/activity/{idInstance}/mempertimbangkan-permohonan-cuti', [DashboardController::class, "activityMempertimbangkanPermohonanCuti"]);
   Route::post('/mempertimbangkan-permohonan-cuti', [DashboardController::class, "mempertimbangkanPermohonanCutiPost"]);
-  
+
   Route::get('/activity/{idInstance}/memberikan-tanda-tangan', [DashboardController::class, "activityMemberikanTandaTangan"]);
   Route::post('/memberikan-tanda-tangan', [DashboardController::class, "memberikanTandaTanganPost"]);
-  
+
   Route::get('/activity/{idInstance}/memberikan-pengesahan-tanda-tangan', [DashboardController::class, "activityMemberikanPengesahanTandaTangan"]);
   Route::post('/memberikan-pengesahan-tanda-tangan', [DashboardController::class, "memberikanPengesahanTandaTanganPost"]);
 });
 
+// Route::post("/memberikan-tanda-tangan", function (Request $request) {
+//   // $request->file("file")->storeAs("public/files", $request->file("file")->getClientOriginalName());
+//   Mail::send('mail.tes', [], function ($message) use ($request) {
+//     $message->from(env("MAIL_FROM_ADDRESS"), env("MAIL_FROM_NAME"));
+//     $message->to("sallieeky@gmail.com", "Sallie Mansurina");
+//     $message->subject("Pengajuan Permohonan Cuti Selesai");
+//     $message->attachData($request->file('file')->get(), $request->file('file')->getClientOriginalName(), [
+//       'mime' => $request->file('file')->getMimeType(),
+//     ]);
+//   });
+// });
+
+Route::get('/tesapi', function () {
+  $res = Http::post(env("API_URL") . "/process-definition/" . env("PROCESS_DEFINITION_ID") . "/start", [
+    "variables" => [
+      "Nama" => [
+        "value" => "AWD",
+        "type" => "String"
+      ],
+      "Nim" => [
+        "value" => "AWDAW",
+        "type" => "String"
+      ],
+      "Angkatan" => [
+        "value" => "AWDAWD",
+        "type" => "String"
+      ],
+      "prodi" => [
+        "value" => "AWDAW",
+        "type" => "String"
+      ],
+    ]
+  ]);
+  return $res;
+});
