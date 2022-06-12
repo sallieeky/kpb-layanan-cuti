@@ -109,9 +109,15 @@
                   </div>
                   {{-- tanda_tangan --}}
                   <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="ttd_mahasiswa">Tanda Tangan</label>
-                      <input type="file" id="ttd_mahasiswa" class="form-control" accept="image/*" name="ttd_mahasiswa" placeholder="Tanda Tangan" required>
+                    <label for="">Tanda Tangan</label>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <canvas id="signature-pad" style="border: 1px solid black; width: 100%; height: 200px"></canvas>
+                        <button class="btn btn-danger" id="clear" type="button">Clear</button>
+                      </div>
+                      <div class="col-md-6">
+                        <img id="img-sign" style="width: 100%; border: 3px dashed black; height:200px">
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -144,6 +150,7 @@
                     </div>
                   </div>
                 </div>
+                <input type="text" name="signature" id="signature-file" required style="display: none">
 
                 <button type="submit" class="btn btn-primary">Start Instance</button>
               </form>
@@ -226,6 +233,47 @@
 
 
 <!-- replace CDN url with local bpmn-js path -->
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.3.5/signature_pad.min.js" integrity="sha512-kw/nRM/BMR2XGArXnOoxKOO5VBHLdITAW00aG8qK4zBzcLVZ4nzg7/oYCaoiwc8U9zrnsO9UHqpyljJ8+iqYiQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script>
+       var canvas = document.getElementById("signature-pad");
+       var clear = document.getElementById("clear");
+       var signatureFile = document.getElementById("signature-file");
+       var imgSign = document.getElementById("img-sign");
+
+       function resizeCanvas() {
+           var ratio = Math.max(window.devicePixelRatio || 1, 1);
+           canvas.width = canvas.offsetWidth * ratio;
+           canvas.height = canvas.offsetHeight * ratio;
+           canvas.getContext("2d").scale(ratio, ratio);
+       }
+       window.onresize = resizeCanvas;
+       resizeCanvas();
+
+      //  size the canvas to fit the signature pad
+
+       const signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(255, 255, 255)',
+            minWidth: 1,
+            maxWidth: 3,
+            penColor: "rgb(0,0,0)"
+        });
+
+        clear.addEventListener("click", function(e) {
+            signaturePad.clear();
+            signatureFile.value = "";
+            imgSign.src = "";
+        });
+
+        // when mouse is released, log the signature using addEventListener
+        signaturePad.addEventListener("endStroke", () => {
+            const data = signaturePad.toDataURL("image/jpeg");
+            signatureFile.value = data;
+            imgSign.src = data;
+            // change value signatureFile to data
+          }, { once: false });
+        
+</script>
 @endsection
 @section('script')
 <script src="https://unpkg.com/bpmn-js/dist/bpmn-viewer.development.js"></script>
@@ -295,5 +343,7 @@ run();
   });
 </script>
 @endif
+
+
 
 @endsection

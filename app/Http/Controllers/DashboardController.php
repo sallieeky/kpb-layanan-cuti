@@ -19,9 +19,6 @@ class DashboardController extends Controller
         ]);
         $response1Finish = $response1Finish->json();
 
-        // return $response1->json();
-        // return $response1Finish;
-
         $response1 =  $response1->json();
         $data["instance"] =  $response1;
 
@@ -45,9 +42,7 @@ class DashboardController extends Controller
 
         $xml = Http::get(env("API_URL") . "/process-definition/" . env("PROCESS_DEFINITION_ID") . "/xml");
         $xml = $xml->json();
-        // return $xml;
 
-        // return $data;
         return view("dashboard", compact("data", "xml"));
     }
 
@@ -77,6 +72,9 @@ class DashboardController extends Controller
 
     public function startInstance(Request $request)
     {
+        // encode request signature
+        $encoded_image = explode(",", $request->signature)[1];
+
         Http::post(env("API_URL") . "/process-definition/" . env("PROCESS_DEFINITION_ID") . "/start", [
             "variables" => [
                 "nama" => [
@@ -124,10 +122,10 @@ class DashboardController extends Controller
                     'type' => 'String'
                 ],
                 'ttd_mahasiswa' => [
-                    "value" => base64_encode($request->file('ttd_mahasiswa')->get()),
+                    "value" => $encoded_image,
                     "type" => "File",
                     "valueInfo" => [
-                        "filename" => $request->file("ttd_mahasiswa")->getClientOriginalName(),
+                        "filename" => "Tanda Tangan Mahasiswa.jpeg",
                     ]
                 ],
             ]
@@ -350,27 +348,28 @@ class DashboardController extends Controller
     }
     public function memberikanTandaTanganPost(Request $request)
     {
-        // return $request;
         if ($request->assignee == "Dosen Wali") {
+            $encoded_image = explode(",", $request->signature_dosen_wali)[1];
             Http::post(env("API_URL") . "/task/" . $request->id . "/submit-form", [
                 "variables" => [
                     "ttd_dosen_wali" => [
-                        "value" => base64_encode($request->file('ttd_dosen_wali')->get()),
+                        "value" => $encoded_image,
                         "type" => "File",
                         "valueInfo" => [
-                            "filename" => $request->file("ttd_dosen_wali")->getClientOriginalName(),
+                            "filename" => "Tanda Tangan Dosen Wali.jpeg",
                         ]
                     ],
                 ]
             ]);
         } else {
+            $encoded_image = explode(",", $request->signature_koordinator_prodi)[1];
             Http::post(env("API_URL") . "/task/" . $request->id . "/submit-form", [
                 "variables" => [
                     "ttd_koordinator_prodi" => [
-                        "value" => base64_encode($request->file('ttd_koordinator_prodi')->get()),
+                        "value" => $encoded_image,
                         "type" => "File",
                         "valueInfo" => [
-                            "filename" => $request->file("ttd_koordinator_prodi")->getClientOriginalName(),
+                            "filename" => "Tanda Tangan Koordinator Prodi.jpeg",
                         ]
                     ],
                 ]

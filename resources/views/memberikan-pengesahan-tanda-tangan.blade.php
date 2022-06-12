@@ -53,7 +53,7 @@
                   <div class="col-md-8">
                     <p>Mengetahui, <br>Dosen Wali,</p>
                       @if(count($data["ttd_dosen_wali"]) > 0)
-                        <img src="data:image/png;base64, {{ $data["ttd_file_dosen_wali"] }}" style="max-width: 100px; max-height:75px">
+                        <img src="data:image/png;base64, {{ $data["ttd_file_dosen_wali"] }}" style="width:200px">
                       @else
                       <br><br><br>
                       @endif
@@ -61,13 +61,13 @@
                   </div>
                   <div class="col-md-4">
                     <p><br> Mahasiswa,</p>
-                      <img src="data:image/png;base64, {{ $data["ttd_mahasiswa"] }}" style="max-width: 100px; max-height:75px">
+                      <img src="data:image/png;base64, {{ $data["ttd_mahasiswa"] }}" style="width:200px">
                     <p>{{ $data["nama"][0]["value"] }} <br>NIM. {{ $data["nim"][0]["value"] }}</p>
                   </div>
                   <div class="m-auto text-center">
                     <p>Mengetahui, <br>Koorprodi {{ $data["nama_koorprodi"][0]["value"] }}</p>
                     @if(count($data["ttd_koordinator_prodi"]) > 0)
-                        <img src="data:image/png;base64, {{ $data["ttd_file_koordinator_prodi"] }}" style="max-width: 100px; max-height:75px">
+                        <img src="data:image/png;base64, {{ $data["ttd_file_koordinator_prodi"] }}" style="width:200px">
                     @else
                     <br><br><br>
                     @endif

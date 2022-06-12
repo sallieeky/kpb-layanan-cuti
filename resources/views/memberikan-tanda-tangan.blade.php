@@ -54,23 +54,23 @@
                   <div class="col-md-8">
                     <p>Mengetahui, <br>Dosen Wali,</p>
                       @if(count($data["ttd_dosen_wali"]) > 0)
-                        <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_dosen_wali"][0]["id"] }}/data" style="max-width: 100px; max-height:75px">
+                        <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_dosen_wali"][0]["id"] }}/data" style="width:200px">
                       @else
-                      <br><br><br>
+                        <img src="" id="img-sign-dosen_wali" alt="" style="width:200px">
                       @endif
                       <p>{{ $data["nama_doswal"][0]["value"] }}<br>NIP/NIPH. {{ $data["nip_doswal"][0]["value"] }}</p>
                   </div>
                   <div class="col-md-4">
                     <p><br> Mahasiswa,</p>
-                      <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_mahasiswa"][0]["id"] }}/data" style="max-width: 100px; max-height:75px">
+                      <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_mahasiswa"][0]["id"] }}/data" style="width:200px">
                     <p>{{ $data["nama"][0]["value"] }} <br>NIM. {{ $data["nim"][0]["value"] }}</p>
                   </div>
                   <div class="m-auto text-center">
                     <p>Mengetahui, <br>Koorprodi {{ $data["nama_koorprodi"][0]["value"] }}</p>
                     @if(count($data["ttd_koordinator_prodi"]) > 0)
-                        <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_koordinator_prodi"][0]["id"] }}/data" style="max-width: 100px; max-height:75px">
+                        <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_koordinator_prodi"][0]["id"] }}/data" style="width:200px">
                     @else
-                    <br><br><br>
+                      <img src="" id="img-sign-koordinator_prodi" alt="" style="width:200px">
                     @endif
                     <p>{{ $data["nama_koorprodi"][0]["value"] }} <br>NIP/NIPH. {{ $data["nip_koorprodi"][0]["value"] }}</p>
                   </div>
@@ -82,14 +82,22 @@
               <div class="row">
               @foreach ($data["task"] as $dt)
               <div class="col-md-6">
+                <label for="">Tanda Tangan {{ $dt["assignee"] }}</label>
+                <canvas id="signature-pad-{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" style="border: 1px solid black; width: 100%; height: 200px"></canvas>
+                <button class="btn btn-danger" id="clear_{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" type="button">Clear</button>
                 <form action="/memberikan-tanda-tangan" method="POST" enctype="multipart/form-data">
                   @csrf
+                  <br>
                   <input type="hidden" name="id" value="{{ $dt["id"] }}">
                   <input type="hidden" name="assignee" value="{{ $dt["assignee"] }}">
-                  <div class="form-group">
+                  <input type="hidden" name="file" id="">
+
+                  <input type="text" name="signature_{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" id="signature-file-{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" required style="display: none">
+
+                  {{-- <div class="form-group">
                     <label for="tanda_tangan">Tanda Tangan {{ $dt["assignee"] }}</label>
                     <input type="file" id="ttd_{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" class="form-control" name="ttd_{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" accept="image/*" required>
-                  </div>
+                  </div> --}}
                   <button type="submit" class="btn btn-primary w-100">Kirim</button>
                 </form>
               </div>
@@ -107,4 +115,81 @@
 
 </div>
 
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script>
+  @if(count($data["ttd_dosen_wali"]) == 0)
+
+  var canvasDoswal = document.getElementById("signature-pad-dosen_wali");
+  var clearDoswal = document.getElementById("clear_dosen_wali");
+  var imgSignDosenWali = document.getElementById("img-sign-dosen_wali");
+  var signatureFileDoswal = document.getElementById("signature-file-dosen_wali");
+    
+    function resizeCanvasDoswal() {
+      var ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvasDoswal.width = canvasDoswal.offsetWidth * ratio;
+        canvasDoswal.height = canvasDoswal.offsetHeight * ratio;
+        canvasDoswal.getContext("2d").scale(ratio, ratio);
+        
+      }
+      window.onresize = resizeCanvasDoswal;
+      resizeCanvasDoswal();
+      
+      const signaturePadDoswal = new SignaturePad(canvasDoswal, {
+        backgroundColor: 'rgb(255, 255, 255)',
+        minWidth: 1,
+        maxWidth: 3,
+        penColor: "rgb(0,0,0)"
+      });
+      
+      clearDoswal.addEventListener("click", function(e) {
+        signaturePadDoswal.clear();
+        signatureFileDoswal.value = "";
+        imgSignDosenWali.src = "";
+      });
+      
+      signaturePadDoswal.addEventListener("endStroke", () => {
+        const data = signaturePadDoswal.toDataURL("image/jpeg");
+        signatureFileDoswal.value = data;
+        imgSignDosenWali.src = data;
+      }, { once: false });
+    @endif
+      
+  @if(count($data["ttd_koordinator_prodi"]) == 0)
+    var canvasKoorpro = document.getElementById("signature-pad-koordinator_prodi");
+    var clearKoorpro = document.getElementById("clear_koordinator_prodi");
+    var imgSignKoorprodi = document.getElementById("img-sign-koordinator_prodi");
+    var signatureFileKoorpro = document.getElementById("signature-file-koordinator_prodi");
+
+    function resizeCanvasKoorprodi() {
+        var ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvasKoorpro.width = canvasKoorpro.offsetWidth * ratio;
+        canvasKoorpro.height = canvasKoorpro.offsetHeight * ratio;
+        canvasKoorpro.getContext("2d").scale(ratio, ratio);
+      }
+      window.onresize = resizeCanvasKoorprodi;
+      resizeCanvasKoorprodi();
+
+    const signaturePadKoorpro = new SignaturePad(canvasKoorpro, {
+        backgroundColor: 'rgb(255, 255, 255)',
+        minWidth: 1,
+        maxWidth: 3,
+        penColor: "rgb(0,0,0)"
+    });
+
+    clearKoorpro.addEventListener("click", function(e) {
+        signaturePadKoorpro.clear();
+        signatureFileKoorpro.value = "";
+        imgSignKoorprodi.src = "";
+    });
+
+    signaturePadKoorpro.addEventListener("endStroke", () => {
+        const data = signaturePadKoorpro.toDataURL("image/jpeg");
+        signatureFileKoorpro.value = data;
+        imgSignKoorprodi.src = data;
+      }, { once: false });
+  @endif
+
+
+</script>
 @endsection
