@@ -56,7 +56,7 @@
                       @if(count($data["ttd_dosen_wali"]) > 0)
                         <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_dosen_wali"][0]["id"] }}/data" style="width:200px">
                       @else
-                        <img src="" id="img-sign-dosen_wali" alt="" style="width:200px">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=" id="img-sign-dosen_wali" alt="" style="width:200px; height: 67.75px">
                       @endif
                       <p>{{ $data["nama_doswal"][0]["value"] }}<br>NIP/NIPH. {{ $data["nip_doswal"][0]["value"] }}</p>
                   </div>
@@ -70,7 +70,7 @@
                     @if(count($data["ttd_koordinator_prodi"]) > 0)
                         <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_koordinator_prodi"][0]["id"] }}/data" style="width:200px">
                     @else
-                      <img src="" id="img-sign-koordinator_prodi" alt="" style="width:200px">
+                      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=" id="img-sign-koordinator_prodi" alt="" style="width:200px; height: 67.75px">
                     @endif
                     <p>{{ $data["nama_koorprodi"][0]["value"] }} <br>NIP/NIPH. {{ $data["nip_koorprodi"][0]["value"] }}</p>
                   </div>
@@ -145,7 +145,7 @@
       clearDoswal.addEventListener("click", function(e) {
         signaturePadDoswal.clear();
         signatureFileDoswal.value = "";
-        imgSignDosenWali.src = "";
+        imgSignDosenWali.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=";
       });
       
       signaturePadDoswal.addEventListener("endStroke", () => {
@@ -180,7 +180,7 @@
     clearKoorpro.addEventListener("click", function(e) {
         signaturePadKoorpro.clear();
         signatureFileKoorpro.value = "";
-        imgSignKoorprodi.src = "";
+        imgSignKoorprodi.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=";
     });
 
     signaturePadKoorpro.addEventListener("endStroke", () => {

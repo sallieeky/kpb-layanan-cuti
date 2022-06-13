@@ -116,7 +116,7 @@
                         <button class="btn btn-danger" id="clear" type="button">Clear</button>
                       </div>
                       <div class="col-md-6">
-                        <img id="img-sign" style="width: 100%; border: 3px dashed black; height:200px">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=" id="img-sign" style="width: 100%; border: 3px dashed black; height:200px">
                       </div>
                     </div>
                   </div>
@@ -262,7 +262,7 @@
         clear.addEventListener("click", function(e) {
             signaturePad.clear();
             signatureFile.value = "";
-            imgSign.src = "";
+            imgSign.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=";
         });
 
         // when mouse is released, log the signature using addEventListener
