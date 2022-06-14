@@ -59,7 +59,7 @@
                   </div>
                   <div class="col-md-4">
                     <p><br> Mahasiswa,</p>
-                    <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_mahasiswa"][0]["id"] }}/data" style="width: 200px">
+                    <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_mahasiswa"][0]["id"] }}/data" style="width: 200px; height: 67.75px">
                     <p>{{ $data["nama"][0]["value"] }} <br>NIM. {{ $data["nim"][0]["value"] }}</p>
                   </div>
                   <div class="m-auto text-center">

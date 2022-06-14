@@ -114,6 +114,8 @@
                       <div class="col-md-6">
                         <canvas id="signature-pad" style="border: 1px solid black; width: 100%; height: 200px"></canvas>
                         <button class="btn btn-danger" id="clear" type="button">Clear</button>
+                        <label for="signature-input-file" class="btn btn-primary mb-0">Choose From File</label>
+                        <input type="file" id="signature-input-file" accept="image/*" style="display: none">
                       </div>
                       <div class="col-md-6">
                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=" id="img-sign" style="width: 100%; border: 3px dashed black; height:200px">
@@ -240,6 +242,7 @@
        var clear = document.getElementById("clear");
        var signatureFile = document.getElementById("signature-file");
        var imgSign = document.getElementById("img-sign");
+       var signatureInputFile = document.getElementById("signature-input-file");
 
        function resizeCanvas() {
            var ratio = Math.max(window.devicePixelRatio || 1, 1);
@@ -259,10 +262,24 @@
             penColor: "rgb(0,0,0)"
         });
 
+
+        // get base64 value from signatureinputfile and set to signaturePad
+        signatureInputFile.addEventListener("change", function() {
+            var file = signatureInputFile.files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                signaturePad.fromDataURL(e.target.result);
+                imgSign.src = e.target.result;
+                signatureFile.value = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
         clear.addEventListener("click", function(e) {
             signaturePad.clear();
             signatureFile.value = "";
             imgSign.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=";
+            signatureInputFile.value = "";
         });
 
         // when mouse is released, log the signature using addEventListener

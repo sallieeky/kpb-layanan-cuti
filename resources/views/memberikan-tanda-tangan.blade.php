@@ -54,23 +54,23 @@
                   <div class="col-md-8">
                     <p>Mengetahui, <br>Dosen Wali,</p>
                       @if(count($data["ttd_dosen_wali"]) > 0)
-                        <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_dosen_wali"][0]["id"] }}/data" style="width:200px">
+                        <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_dosen_wali"][0]["id"] }}/data" style="width:200px; height:67.75px">
                       @else
-                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=" id="img-sign-dosen_wali" alt="" style="width:200px; height: 67.75px">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=" id="img-sign-dosen_wali" alt="" style="width:200px; height:67.75px">
                       @endif
                       <p>{{ $data["nama_doswal"][0]["value"] }}<br>NIP/NIPH. {{ $data["nip_doswal"][0]["value"] }}</p>
                   </div>
                   <div class="col-md-4">
                     <p><br> Mahasiswa,</p>
-                      <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_mahasiswa"][0]["id"] }}/data" style="width:200px">
+                      <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_mahasiswa"][0]["id"] }}/data" style="width:200px; height:67.75px">
                     <p>{{ $data["nama"][0]["value"] }} <br>NIM. {{ $data["nim"][0]["value"] }}</p>
                   </div>
                   <div class="m-auto text-center">
                     <p>Mengetahui, <br>Koorprodi {{ $data["nama_koorprodi"][0]["value"] }}</p>
                     @if(count($data["ttd_koordinator_prodi"]) > 0)
-                        <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_koordinator_prodi"][0]["id"] }}/data" style="width:200px">
+                        <img src="{{ env("API_URL") }}/variable-instance/{{ $data["ttd_koordinator_prodi"][0]["id"] }}/data" style="width:200px; height:67.75px">
                     @else
-                      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=" id="img-sign-koordinator_prodi" alt="" style="width:200px; height: 67.75px">
+                      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=" id="img-sign-koordinator_prodi" alt="" style="width:200px; height:67.75px">
                     @endif
                     <p>{{ $data["nama_koorprodi"][0]["value"] }} <br>NIP/NIPH. {{ $data["nip_koorprodi"][0]["value"] }}</p>
                   </div>
@@ -85,12 +85,17 @@
                 <label for="">Tanda Tangan {{ $dt["assignee"] }}</label>
                 <canvas id="signature-pad-{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" style="border: 1px solid black; width: 100%; height: 200px"></canvas>
                 <button class="btn btn-danger" id="clear_{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" type="button">Clear</button>
+                
+                <label for="signature-input-file-{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" class="btn btn-primary mb-0">Choose From File</label>
+
                 <form action="/memberikan-tanda-tangan" method="POST" enctype="multipart/form-data">
                   @csrf
                   <br>
                   <input type="hidden" name="id" value="{{ $dt["id"] }}">
                   <input type="hidden" name="assignee" value="{{ $dt["assignee"] }}">
                   <input type="hidden" name="file" id="">
+
+                  <input type="file" id="signature-input-file-{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" accept="image/*" style="display: none">
 
                   <input type="text" name="signature_{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" id="signature-file-{{ str_replace(" ", "_", strtolower($dt["assignee"])) }}" required style="display: none">
 
@@ -124,6 +129,8 @@
   var clearDoswal = document.getElementById("clear_dosen_wali");
   var imgSignDosenWali = document.getElementById("img-sign-dosen_wali");
   var signatureFileDoswal = document.getElementById("signature-file-dosen_wali");
+
+  var signatureInputFileDoswal = document.getElementById("signature-input-file-dosen_wali");
     
     function resizeCanvasDoswal() {
       var ratio = Math.max(window.devicePixelRatio || 1, 1);
@@ -141,11 +148,23 @@
         maxWidth: 3,
         penColor: "rgb(0,0,0)"
       });
+
+      signatureInputFileDoswal.addEventListener("change", function() {
+            var file = signatureInputFileDoswal.files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                signaturePadDoswal.fromDataURL(e.target.result);
+                imgSignDosenWali.src = e.target.result;
+                signatureFileDoswal.value = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
       
       clearDoswal.addEventListener("click", function(e) {
         signaturePadDoswal.clear();
         signatureFileDoswal.value = "";
         imgSignDosenWali.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=";
+        signatureInputFileDoswal.value = "";
       });
       
       signaturePadDoswal.addEventListener("endStroke", () => {
@@ -160,6 +179,8 @@
     var clearKoorpro = document.getElementById("clear_koordinator_prodi");
     var imgSignKoorprodi = document.getElementById("img-sign-koordinator_prodi");
     var signatureFileKoorpro = document.getElementById("signature-file-koordinator_prodi");
+
+    var signatureInputFileKoorpro = document.getElementById("signature-input-file-koordinator_prodi");
 
     function resizeCanvasKoorprodi() {
         var ratio = Math.max(window.devicePixelRatio || 1, 1);
@@ -177,10 +198,22 @@
         penColor: "rgb(0,0,0)"
     });
 
+    signatureInputFileKoorpro.addEventListener("change", function() {
+            var file = signatureInputFileKoorpro.files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                signaturePadKoorpro.fromDataURL(e.target.result);
+                imgSignKoorprodi.src = e.target.result;
+                signatureFileKoorpro.value = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
     clearKoorpro.addEventListener("click", function(e) {
         signaturePadKoorpro.clear();
         signatureFileKoorpro.value = "";
         imgSignKoorprodi.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=";
+        signatureInputFileKoorpro.value = "";
     });
 
     signaturePadKoorpro.addEventListener("endStroke", () => {

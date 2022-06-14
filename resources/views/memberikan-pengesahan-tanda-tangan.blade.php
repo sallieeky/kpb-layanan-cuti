@@ -53,7 +53,7 @@
                   <div class="col-md-8">
                     <p>Mengetahui, <br>Dosen Wali,</p>
                       @if(count($data["ttd_dosen_wali"]) > 0)
-                        <img src="data:image/png;base64, {{ $data["ttd_file_dosen_wali"] }}" style="width:200px">
+                        <img src="data:image/png;base64, {{ $data["ttd_file_dosen_wali"] }}" style="width:200px; height:67.75px">
                       @else
                       <br><br><br>
                       @endif
@@ -61,13 +61,13 @@
                   </div>
                   <div class="col-md-4">
                     <p><br> Mahasiswa,</p>
-                      <img src="data:image/png;base64, {{ $data["ttd_mahasiswa"] }}" style="width:200px">
+                      <img src="data:image/png;base64, {{ $data["ttd_mahasiswa"] }}" style="width:200px; height:67.75px">
                     <p>{{ $data["nama"][0]["value"] }} <br>NIM. {{ $data["nim"][0]["value"] }}</p>
                   </div>
                   <div class="m-auto text-center">
                     <p>Mengetahui, <br>Koorprodi {{ $data["nama_koorprodi"][0]["value"] }}</p>
                     @if(count($data["ttd_koordinator_prodi"]) > 0)
-                        <img src="data:image/png;base64, {{ $data["ttd_file_koordinator_prodi"] }}" style="width:200px">
+                        <img src="data:image/png;base64, {{ $data["ttd_file_koordinator_prodi"] }}" style="width:200px; height:67.75px">
                     @else
                     <br><br><br>
                     @endif
@@ -120,13 +120,13 @@ $('#cmd').click(function () {
       var wdt;
       var hgt;
 
-      var img = canvas.toDataURL("image/png", wdt = canvas.width, hgt = canvas.height);
+      var img = canvas.toDataURL("image/jpeg", wdt = canvas.width, hgt = canvas.height);
       var rasio = hgt/wdt;
 
       var doc = new jsPDF("p", "pt", "a4");
       var width = doc.internal.pageSize.width + 300;
       var height = width * rasio;
-      doc.addImage(img, "png", -50, 50, width, height);
+      doc.addImage(img, "JPEG", -50, 50, width, height);
       // doc.save("Permohonan Izin Cuti.pdf");
 
       var blob = doc.output("blob");

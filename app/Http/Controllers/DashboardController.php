@@ -43,6 +43,7 @@ class DashboardController extends Controller
         $xml = Http::get(env("API_URL") . "/process-definition/" . env("PROCESS_DEFINITION_ID") . "/xml");
         $xml = $xml->json();
 
+
         return view("dashboard", compact("data", "xml"));
     }
 
@@ -496,6 +497,8 @@ class DashboardController extends Controller
             "alasan" => $request->alasan,
         ];
 
+        // return response()->json($data);
+
         Mail::send('mail.selesai', $data, function ($message) use ($request) {
             $message->from(env("MAIL_FROM_ADDRESS"), env("MAIL_FROM_NAME"));
             $message->to($request->email, $request->nama);
@@ -517,7 +520,9 @@ class DashboardController extends Controller
             ]
         ]);
 
-
-        return redirect("/")->with("pesan", "Pengesahan Tanda Tangan Berhasil Dikirim");
+        return response()->json([
+            "status" => "success",
+            "message" => "Pengajuan Permohonan Cuti Selesai berhasil dikirim"
+        ]);
     }
 }
